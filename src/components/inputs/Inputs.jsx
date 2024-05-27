@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import FilterByMonth from '../filter/FilterByMonth';
+import { useContext } from 'react';
+import { DataContext } from '../../context/DataContext';
 
 const StInputContainer = styled.input`
   width: 200px;
@@ -36,7 +38,8 @@ const StForm = styled.form`
   display: flex;
 `;
 
-const Inputs = ({ setStatement, setFilteredMonth }) => {
+const Inputs = () => {
+  const { setStatement, setFilteredMonth } = useContext(DataContext);
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);

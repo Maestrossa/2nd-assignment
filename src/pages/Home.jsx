@@ -12,22 +12,11 @@ const StMain = styled.main`
   margin: 0px auto;
 `;
 
-const Home = ({
-  statement = { statement },
-  setStatement = { setStatement },
-  filteredMonth = { filteredMonth },
-  setFilteredMonth = { setFilteredMonth },
-  filteredData = { filteredData },
-}) => {
+const Home = () => {
   return (
     <StMain>
-      <Inputs
-        statement={statement}
-        setStatement={setStatement}
-        filteredMonth={filteredMonth}
-        setFilteredMonth={setFilteredMonth}
-      />
-      <SpendingList filteredData={filteredData} />
+      <Inputs />
+      <SpendingList />
     </StMain>
   );
 };

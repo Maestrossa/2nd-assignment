@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { DataContext } from '../../context/DataContext';
 
 const StBtnContainer = styled.div`
   width: 800px;
@@ -29,7 +30,8 @@ const StBtn = styled.button`
   }
 `;
 
-const FilterByMonth = ({ setFilteredMonth }) => {
+const FilterByMonth = () => {
+  const { setFilteredMonth } = useContext(DataContext);
   const [activeIndex, setActiveIndex] = useState(null);
 
   const handleClick = (index) => {

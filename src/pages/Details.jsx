@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { DataContext } from '../context/DataContext';
 
 const StFormContainer = styled.form`
   max-width: 800px;
@@ -65,7 +66,8 @@ const StBtnContainer = styled.div`
   }
 `;
 
-const Details = ({ statement, setStatement }) => {
+const Details = () => {
+  const { statement, setStatement } = useContext(DataContext);
   const params = useParams();
   const navigate = useNavigate();
   const goToHome = () => {
@@ -81,9 +83,6 @@ const Details = ({ statement, setStatement }) => {
     const category = formData.get('category');
     const item = formData.get('item');
     const amount = formData.get('amount');
-
-    console.log('Form Data:', { date, category, item, amount });
-    console.log('Target Data:', targetData);
 
     if (!date || !category.trim() || !item.trim() || !amount.trim()) return alert('모든 항목에 기입하세요.');
 
@@ -112,19 +111,12 @@ const Details = ({ statement, setStatement }) => {
     });
 
     setStatement(editedRecord);
-    // setStatement([statement, newSpendingRecord])
+    // setStatement([statement, newSpendingRecord]);
 
     alert('수정되었습니다.');
     goToHome();
-
-    e.target.reset();
   };
 
-  // const removeRecord = () => {
-  //   confirm('정말 해당 지출 내역을 삭제하시겠습니까?');
-  //   setStatement(statement.filter((el) => el.id !== params.id));
-  //   goToHome();
-  // };
   const deleteRecord = () => {
     if (window.confirm('정말 해당 지출내역을 삭제하시겠습니까?')) {
       setStatement(statement.filter((el) => el.id !== params.id));

@@ -9,10 +9,6 @@ const GlobalStyle = createGlobalStyle`
         color: #d6d6d6;
         font-family: 'Sunflower', sans-serif;
         line-height: 1.5;
-
- 
-
-
     };
 
     #root {

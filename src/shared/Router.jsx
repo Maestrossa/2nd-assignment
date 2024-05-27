@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
 import Details from '../pages/Details';
+import { DataContext } from '../context/DataContext';
 
 const Router = () => {
   const initialState = [
@@ -38,21 +39,20 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              statement={statement}
-              setStatement={setStatement}
-              filteredMonth={filteredMonth}
-              setFilteredMonth={setFilteredMonth}
-              filteredData={filteredData}
-            />
-          }
-        />
-        <Route path="/details/:id" element={<Details statement={statement} setStatement={setStatement} />} />
-      </Routes>
+      <DataContext.Provider
+        value={{
+          statement,
+          setStatement,
+          filteredMonth,
+          setFilteredMonth,
+          filteredData,
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/details/:id" element={<Details />} />
+        </Routes>
+      </DataContext.Provider>
     </BrowserRouter>
   );
 };

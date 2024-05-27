@@ -1,5 +1,7 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { DataContext } from '../../context/DataContext';
 
 const StLink = styled(Link)`
   width: 800px;
@@ -37,7 +39,9 @@ const StDiv = styled.div`
   }
 `;
 
-const SpendingList = ({ filteredData }) => {
+const SpendingList = ({}) => {
+  const { filteredData } = useContext(DataContext);
+
   return (
     <section>
       <div>
