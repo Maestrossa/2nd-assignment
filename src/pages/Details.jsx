@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { DataContext } from '../context/DataContext';
+import { updateRecord, deleteRecord } from '../redux/slices/statementSlice';
 
 const StFormContainer = styled.form`
   max-width: 800px;
@@ -67,14 +67,14 @@ const StBtnContainer = styled.div`
 `;
 
 const Details = () => {
-  const { statement, setStatement } = useContext(DataContext);
+  const dispatch = useDispatch();
+  const statement = useSelector((state) => state.spendingHistory.statement);
   const params = useParams();
   const navigate = useNavigate();
+  const targetData = statement.find((data) => data.id === params.id);
   const goToHome = () => {
     navigate('/');
   };
-
-  const targetData = statement.find((data) => data.id === params.id);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -82,48 +82,38 @@ const Details = () => {
     const date = formData.get('date');
     const category = formData.get('category');
     const item = formData.get('item');
-    const amount = formData.get('amount');
+    const amount = Number(formData.get('amount'));
 
-    if (!date || !category.trim() || !item.trim() || !amount.trim()) return alert('모든 항목에 기입하세요.');
+    if (!date || !category.trim() || !item.trim() || !amount) return alert('모든 항목에 기입하세요.');
 
     if (
       date === targetData.date &&
       category === targetData.category &&
       item === targetData.item &&
-      Number(amount) === targetData.amount
+      amount === targetData.amount
     ) {
       return alert('수정된 항목이 없습니다.\n수정될 값을 다시 확인하여 주세요.');
     }
-
     const newSpendingRecord = {
-      id: `${params.id}`,
+      id: targetData.id,
       date,
       category,
       item,
       amount,
     };
 
-    const editedRecord = statement.map((spendingData) => {
-      if (spendingData.id === params.id) {
-        return newSpendingRecord;
-      }
-      return spendingData;
-    });
-
-    setStatement(editedRecord);
-    // setStatement([statement, newSpendingRecord]);
-
+    dispatch(updateRecord(newSpendingRecord));
     alert('수정되었습니다.');
     goToHome();
   };
 
-  const deleteRecord = () => {
+  const handleDelete = () => {
     if (window.confirm('정말 해당 지출내역을 삭제하시겠습니까?')) {
-      setStatement(statement.filter((el) => el.id !== params.id));
+      dispatch(deleteRecord(targetData.id));
       alert('삭제가 완료되었습니다.');
       goToHome();
     } else {
-      alert('삭제가 취소되었습니다.');
+      return alert('삭제가 취소되었습니다.');
     }
   };
 
@@ -144,8 +134,12 @@ const Details = () => {
           <StInput defaultValue={targetData.amount} type="number" placeholder="지출 금액" name="amount" />
           <StBtnContainer>
             <button type="submit">수정</button>
-            <button onClick={deleteRecord}>삭제</button>
-            <button onClick={goToHome}>뒤로가기</button>
+            <button type="button" onClick={handleDelete}>
+              삭제
+            </button>
+            <button type="button" onClick={goToHome}>
+              뒤로가기
+            </button>
           </StBtnContainer>
         </StFormContainer>
       </div>

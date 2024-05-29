@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import FilterByMonth from '../filter/FilterByMonth';
-import { useContext } from 'react';
-import { DataContext } from '../../context/DataContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addStatement } from '../../redux/slices/statementSlice';
 
 const StInputContainer = styled.input`
   width: 200px;
@@ -39,7 +39,9 @@ const StForm = styled.form`
 `;
 
 const Inputs = () => {
-  const { setStatement, setFilteredMonth } = useContext(DataContext);
+  const dispatch = useDispatch();
+  const statement = useSelector((state) => state.spendingHistory);
+
   const onSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -58,7 +60,7 @@ const Inputs = () => {
       amount,
     };
 
-    setStatement((prevInventory) => [...prevInventory, newSpendingRecord]);
+    dispatch(addStatement(newSpendingRecord));
     e.target.reset();
   };
 
@@ -74,7 +76,7 @@ const Inputs = () => {
         </StForm>
       </div>
       <div>
-        <FilterByMonth setFilteredMonth={setFilteredMonth} />
+        <FilterByMonth />
       </div>
     </div>
   );

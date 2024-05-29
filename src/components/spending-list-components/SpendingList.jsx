@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { DataContext } from '../../context/DataContext';
+import { useSelector } from 'react-redux';
 
 const StLink = styled(Link)`
   width: 800px;
@@ -39,13 +38,31 @@ const StDiv = styled.div`
   }
 `;
 
-const SpendingList = ({}) => {
-  const { filteredData } = useContext(DataContext);
+const SpendingList = () => {
+  // 1. 내가 선택한 '월'에 맞는 데이터를 필터
+  // 2. 준비물 : 내가 선택한 월, 원본 데이터
+
+  // 3. 원본 데이터 가져오기
+  const statement = useSelector((state) => state.spendingHistory.statement);
+  // 4. 내가 선택한 월 가져오기
+  const activeIndex = useSelector((state) => state.spendingHistory.selectedMonth);
+
+  // 원본 데이터에서 내가 선택한 '월'에 맞는 데이터들만 필터링
+  const getFilteredStatement = () => {
+    return statement.filter((item) => {
+      const dateObject = new Date(item.date); //Date 공부해보기
+      // console.log('dateObject =>', dateObject);
+      // console.log('dateObject.getMonth() =>', dateObject.getMonth());
+      return dateObject.getMonth() + 1 === activeIndex;
+    });
+  };
+
+  const filterdList = getFilteredStatement();
 
   return (
     <section>
       <div>
-        {filteredData.map((item) => (
+        {filterdList.map((item) => (
           <StLink to={`/details/${item.id}`} key={item.id}>
             <StDiv>
               <span>{item.date}</span>

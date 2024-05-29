@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { DataContext } from '../../context/DataContext';
+import { setSelectedMonth } from '../../redux/slices/statementSlice';
 
 const StBtnContainer = styled.div`
   width: 800px;
@@ -31,30 +32,35 @@ const StBtn = styled.button`
 `;
 
 const FilterByMonth = () => {
-  const { setFilteredMonth } = useContext(DataContext);
-  const [activeIndex, setActiveIndex] = useState(null);
+  const dispatch = useDispatch();
 
-  const handleClick = (index) => {
-    setActiveIndex(index);
-    setFilteredMonth(index);
-    localStorage.setItem('selectedMonth', index);
+  const activeIndex = useSelector((state) => state.spendingHistory.selectedMonth); // store에서 가져온 값
+  // 리덕스 값은 새로고침하면 휘발됨.
+  const handleClick = (month) => {
+    dispatch(setSelectedMonth(month));
+    localStorage.setItem('selectedMonth', month);
   };
 
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
+  // 1. 페이지가 리렌더링될때 시작값 (선택되있는 월) => 페이지 그려질 때 자동으로 월이 선택되어야 함.
+
+  // 2. 준비물: 제일 마지막으로 선택된 월. 로컬스토리지 => 로지스토리지에서 가져올 수 있음.
+
+  // 3. 리렌더링될때 로컬스토리지에서 가져온다 useEffect를 사용.
   useEffect(() => {
-    const storedMonth = localStorage.getItem('selectedMonth');
-    if (storedMonth) {
-      handleClick(parseInt(storedMonth));
-    }
+    const getLocalMonth = Number(localStorage.getItem('selectedMonth'));
+    // 4. useEffect안에서 가져온 월을 가지고 선택?
+    // localStorage에서 값을 가져오면 string 타입
+    handleClick(getLocalMonth);
   }, []);
 
   return (
     <section>
       <StBtnContainer>
-        {months.map((i) => (
-          <StBtn key={i} $active={activeIndex === i} onClick={() => handleClick(i)}>
-            {i}월
+        {months.map((month) => (
+          <StBtn key={month} $active={activeIndex === month} onClick={() => handleClick(month)}>
+            {month}월
           </StBtn>
         ))}
       </StBtnContainer>
