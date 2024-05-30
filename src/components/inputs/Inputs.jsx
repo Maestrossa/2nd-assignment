@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import FilterByMonth from '../filter/FilterByMonth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addStatement } from '../../redux/slices/statementSlice';
 
 const StInputContainer = styled.input`
@@ -40,7 +40,7 @@ const StForm = styled.form`
 
 const Inputs = () => {
   const dispatch = useDispatch();
-  const statement = useSelector((state) => state.spendingHistory);
+  // const statement = useSelector((state) => state.spendingHistory);
 
   const onSubmit = (e) => {
     e.preventDefault();

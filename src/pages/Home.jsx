@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import Inputs from '../components/inputs/Inputs';
 import SpendingList from '../components/spending-list-components/SpendingList';
 import styled from 'styled-components';

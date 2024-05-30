@@ -70,7 +70,7 @@ const SpendingList = () => {
                 {item.category} - {item.item}
               </span>
             </StDiv>
-            <span>{new Intl.NumberFormat('en-US').format(item.amount)} 원</span>
+            <span>{item.amount.toLocaleString()} 원</span>
           </StLink>
         ))}
       </div>

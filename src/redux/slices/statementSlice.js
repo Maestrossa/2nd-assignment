@@ -51,7 +51,7 @@ const statementSlice = createSlice({
       }
     },
     deleteRecord: (state, action) => {
-      state.statement = state.statement.filter((item) => item.id !== action.payload);
+      state.statement = state.statement.filter((item) => item.id !== action.payload.id);
     },
     setSelectedMonth: (state, action) => {
       state.selectedMonth = action.payload;

@@ -76,7 +76,7 @@ const Details = () => {
     navigate('/');
   };
 
-  const onSubmit = (e) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const date = formData.get('date');
@@ -84,18 +84,19 @@ const Details = () => {
     const item = formData.get('item');
     const amount = Number(formData.get('amount'));
 
-    if (!date || !category.trim() || !item.trim() || !amount) return alert('모든 항목에 기입하세요.');
+    if (amount <= 0) return alert('0 이상의 금액을 입력하세요.');
+    if (!date || !category.trim() || !item.trim() || !amount || amount <= 0) return alert('모든 항목에 기입하세요.');
 
     if (
       date === targetData.date &&
       category === targetData.category &&
       item === targetData.item &&
-      amount === targetData.amount
+      amount === Number(targetData.amount)
     ) {
       return alert('수정된 항목이 없습니다.\n수정될 값을 다시 확인하여 주세요.');
     }
     const newSpendingRecord = {
-      id: targetData.id,
+      id: params.id,
       date,
       category,
       item,
@@ -109,7 +110,7 @@ const Details = () => {
 
   const handleDelete = () => {
     if (window.confirm('정말 해당 지출내역을 삭제하시겠습니까?')) {
-      dispatch(deleteRecord(targetData.id));
+      dispatch(deleteRecord(targetData));
       alert('삭제가 완료되었습니다.');
       goToHome();
     } else {
@@ -120,7 +121,7 @@ const Details = () => {
   return (
     <section>
       <div>
-        <StFormContainer onSubmit={onSubmit}>
+        <StFormContainer onSubmit={handleUpdate}>
           <StLabel>날짜</StLabel>
           <StInput defaultValue={targetData.date} type="date" placeholder="날짜" name="date" />
 
